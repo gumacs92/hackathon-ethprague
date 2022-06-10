@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+    @apply cursor-pointer text-white hover:text-blue-300 text-lg
+}
+
+.disabled {
+    @apply pointer-events-none cursor-default text-gray-500
+}
