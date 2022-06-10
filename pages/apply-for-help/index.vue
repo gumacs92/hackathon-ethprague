@@ -26,8 +26,8 @@
 </template>
 <script>
 // import BaseContainer from '~/components/BaseContainer'
-import Input from '~/components/Input'
-import Textarea from '~/components/Textarea'
+import Input from '~/components/inputs/Input'
+import Textarea from '~/components/inputs/Textarea'
 export default {
   name: 'ApplyForHelpPage',
   components: {
