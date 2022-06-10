@@ -7,6 +7,15 @@ module.exports = {
     media: false, // or 'media' or 'class'
     variants: {},
     theme: {
+      extend: {
+        fontFamily: {
+          merriweather: ["Merriweather", "sans-serif"],
+          raleway: ["Raleway", "serif"],
+        },
+        backgroundImage: {
+          'blue-texture': "url('/img/blue-texture.jpg')"
+        }
+      }
     },
     plugins: [],
 }
