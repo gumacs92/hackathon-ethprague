@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="icon"
-      class="absolute h-12 flex place-items-center place-content-center"
+      class="ml-3 absolute h-12 flex place-items-center place-content-center"
     >
       <img
         :src="icon"
@@ -14,15 +14,17 @@
       :placeholder="placeholder"
       :rows="rows"
       :disabled="disabled"
-      :class="{ '!bg-gray-300': disabled, 'pl-11': icon}"
-      class="] bg-transparent border-b border-deco-400 min-h-12 px-5 w-full focus:outline-none hover:ring-gray-600 group-hover:bg-[#e8f0fe] group-disabled:bg-gray-300 disabled:bg-gray-300"
+      :class="{ '!bg-gray-400': disabled, 'pl-11': icon}"
+      class="ring-1 ring-[#CFCFCF] rounded min-h-12 px-5 py-3 w-full font-merriweather
+      focus:outline-none focus-within:bg-[#e8f0fe] hover:ring-red-600 focus:ring-red-600
+      group-hover:bg-[#e8f0fe] group-disabled:bg-gray-400 disabled:bg-gray-400"
       @input="updateText()"
       @focus="isFocus = true"
       @blur="isFocus = false"
     />
     <div
       :class="{ '!h-[32px]': validationErrors }"
-      class="text-sm text-red transition-all h-[0px] duration-1000"
+      class="font-merriweather text-sm text-red transition-all h-[0px] duration-1000"
     >
       {{ validationErrors ? validationErrors[0] : "" }}
     </div>
@@ -31,14 +33,15 @@
 
 <script>
 export default {
+  name: 'InputTextarea',
   props: {
     value: {
-      validator: prop => typeof prop === "string" || prop === null,
+      validator: prop => typeof prop === 'string' || prop === null,
       required: true
     },
     defaultValue: {
       type: String,
-      default: ""
+      default: ''
     },
     disabled: {
       type: Boolean,
@@ -46,16 +49,16 @@ export default {
     },
     placeholder: {
       type: String,
-      default: ""
+      default: ''
     },
     icon: {
       type: String,
-      default: ""
+      default: ''
     },
     validationErrors: {
       type: Array,
       default: () => {
-        return [];
+        return []
       }
     },
     rows: {
@@ -63,24 +66,24 @@ export default {
       default: 8
     }
   },
-  data() {
+  data () {
     return {
       innerValue: '',
       isFocus: false
-    };
+    }
   },
   watch: {
-    value(newValue) {
+    value (newValue) {
       this.innerValue = newValue
     }
   },
-  beforeMount() {
+  beforeMount () {
     this.innerValue = this.defaultValue ? this.defaultValue : this.value
   },
   methods: {
-    updateText() {
-      this.$emit("input", this.innerValue);
+    updateText () {
+      this.$emit('input', this.innerValue)
     }
   }
-};
+}
 </script>
