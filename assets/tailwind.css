@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "Merriweather";
+    src: url("/fonts/Merriweather-Bold.ttf");
+}
+
+@font-face {
+    font-family: "Raleway";
+    src: url("/fonts/Raleway-Regular.ttf");
+}
+
+.btn {
+    @apply cursor-pointer text-white px-5 py-3 bg-red-600 rounded-3xl
+    transform transition-all hover:scale-105 font-merriweather text-lg
+    hover:border hover:border-red-600 hover:bg-white hover:text-red-600
+}
+
+
+.btn-link {
+    @apply cursor-pointer text-red-600 hover:text-black font-merriweather text-lg
+}
+
+.disabled {
+    @apply pointer-events-none cursor-default text-gray-500
+}
+
+h1 {
+    @apply text-5xl font-bold font-merriweather text-red-600
+}
+
+h2 {
+    @apply text-3xl font-bold font-merriweather text-red-300
+}
+
+p {
+    @apply mt-3 text-base font-raleway text-black
+}
