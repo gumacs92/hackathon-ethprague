@@ -17,8 +17,10 @@
               <nuxt-link class="btn-link" to="apply-for-help">
                 Apply for help
               </nuxt-link>
-              <a class="btn-link">Be an angel</a>
-              <a class="btn-link">Help us govern</a>
+              <nuxt-link class="btn-link" to="/be-an-angel">
+                Be an angel
+              </nuxt-link>
+              <a class="btn-link" target="_blank" href="http://localhost:3000">Help us govern</a>
             </div>
           </div>
         </div>

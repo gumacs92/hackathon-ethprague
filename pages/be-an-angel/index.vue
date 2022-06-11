@@ -9,20 +9,24 @@
     <div class="max-w-5xl mx-auto flex flex-col items-center mt-12 w-full">
       <div class="text-center">
         <h1 class="h1">
-          You came to the right place
+          Be an angel for us
         </h1>
         <h2>
-          Please fill in the form below to apply for help
+          Thank you for your generosity
         </h2>
       </div>
-      <div class="flex flex-col gap-5 w-full mt-5">
+      <div v-if="user" class="flex flex-col gap-5 w-full mt-5">
         <Input v-model="form.name" placeholder="Name" class="w-full" />
         <Input v-model="form.email" placeholder="Email" class="w-full" />
-        <Input v-model="form.address" placeholder="Place your public address here" class="w-full" />
-        <Textarea v-model="form.description" placeholder="Please describe your situatun and how you got there, it will help the governors to decide about the help" class="w-full" />
+        <Input v-model="form.amount" placeholder="How much ETH would you like to give?" class="w-full" />
 
-        <button class="btn text-center self-center w-52" @click="helpMe()">
-          I need to help!
+        <button class="btn text-center self-center w-52" @click="iWishToHelp()">
+          I wish to help
+        </button>
+      </div>
+      <div v-else class="flex flex-col gap-5 w-full mt-5">
+        <button class="btn text-center self-center w-60" @click="connectWithMoralis()">
+          Please login to contribute
         </button>
       </div>
     </div>
@@ -30,14 +34,13 @@
 </template>
 <script>
 // import BaseContainer from '~/components/BaseContainer'
+import Moralis from 'moralis'
 import Input from '~/components/inputs/Input'
-import Textarea from '~/components/inputs/Textarea'
 export default {
   name: 'ApplyForHelpPage',
   components: {
     // BaseContainer
-    Input,
-    Textarea
+    Input
   },
   data () {
     return {
@@ -64,9 +67,22 @@ export default {
     this.form.address = this.user ? this.address : ''
   },
   methods: {
-    helpMe () {
+    iWishToHelp () {
       console.log(this.form)
-      console.log('HALP')
+      console.log('HALP IS ON THE WAY')
+    },
+    async connectWithMoralis () {
+      if (!this.user) {
+        try {
+          const user = await Moralis.authenticate({
+            signingMessage: 'Log in using Moralis'
+          })
+          if (user) { this.$store.commit('setUser', user) }
+        } catch (e) {
+          console.log(e)
+        }
+      }
+      this.showConnectWalletModal = false
     }
   }
 }
