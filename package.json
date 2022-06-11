@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.6.0",
+    "@remix-project/remixd": "^0.6.2",
     "core-js": "^3.19.3",
     "moralis": "^1.8.0",
     "nuxt": "^2.15.8",

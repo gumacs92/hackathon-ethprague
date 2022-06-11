@@ -7,7 +7,10 @@ import { EventData, PastEventOptions } from "web3-eth-contract";
 
 export interface RedCrossVaultContract
   extends Truffle.Contract<RedCrossVaultInstance> {
-  "new"(meta?: Truffle.TransactionDetails): Promise<RedCrossVaultInstance>;
+  "new"(
+    _elfiContract: string,
+    meta?: Truffle.TransactionDetails
+  ): Promise<RedCrossVaultInstance>;
 }
 
 export interface Approval {
@@ -272,7 +275,7 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
         expectedAmount: string;
       },
       txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
+    ): Promise<BN>;
     sendTransaction(
       input: {
         name: string;
@@ -566,7 +569,7 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
           expectedAmount: string;
         },
         txDetails?: Truffle.TransactionDetails
-      ): Promise<void>;
+      ): Promise<BN>;
       sendTransaction(
         input: {
           name: string;

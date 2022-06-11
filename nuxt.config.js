@@ -62,5 +62,8 @@ export default {
   publicRuntimeConfig: {
     moralisAppId: process.env.MORALIS_APP_ID || '',
     moralisServerUrl: process.env.MORALIS_SERVER_URL || '',
+    councilVaultContract: process.env.COUNCIL_VAULT_CONTRACT || '',
+    redCrossVaultContract: process.env.RED_CROSS_VAULT_CONTRACT || '',
+    councilVotingContract: process.env.COUNCIL_VOTING_CONTRACT || ''
   }
 }

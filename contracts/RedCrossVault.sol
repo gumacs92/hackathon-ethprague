@@ -38,7 +38,9 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
         string givenAmount;
     }
 
-    address elfiContractAddress;
+    address elfiContract;
+    address coreVoting;
+    address vaultLockingContract;
 
     uint256 requestsNum = 0;
     VictimRequest[] requests;
@@ -48,8 +50,8 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
     Angel[] angels;
 
 
-    constructor(address elfiContract) ERC721("Angel", "AT"){ 
-        elfiContractAddress = elfiContract;
+    constructor(address _elfiContract) ERC721("Angel", "AT"){ 
+        elfiContract = _elfiContract;
     }
 
     // Donate function amiben elmentjük a donatelőt is, hozzáadjuk az angel structhoz vagy arrayhez + mintelünk NFT-t
@@ -67,7 +69,7 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
         // elfiContractAddress.call()
     }
 
-    function requestHelp(VictimRequestInput memory input) public {
+    function requestHelp(VictimRequestInput memory input) public returns(uint256) {
         requests.push(VictimRequest({
             id: requestsNum++,
             myAddress: msg.sender,
@@ -78,6 +80,8 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
             valid: false,
             approved: false
         }));
+        return requestsNum -1;
+        // coreVoting.call("proposal",[vaultLockingContract], [], [address(this)], ["todo calldatas"], "lastCall todo", "MAYBE");
     }
 
     function validateRequest(uint256 requestId) public {
@@ -93,43 +97,4 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
     function getVaultBalance() public view returns (uint256){
         return address(this).balance; // gets back main vault Balance
     }
-
-
-
-// function proposeNewFunding(address _newVault, string memory _description) public {
-//         Itt ezt ugyanúgy csak governor tudja megtenni, nyit egy új vault address-t amire lehet donatelni
-//         Pl volt egy földrengés és az ottani embereket akarják segíteni ezzel minden pénzel ami befolyik
-//     Itt pl ezt lehessen látni mennyi pénz ment be eddig a megadott Vaultba 
-// }
-
-// governance smart contractot is inheritálhatjuk, bár ez nem teljesen szükséges
-// Berakjuk az Ownable-t is, az az address lesz majd az egyik governor
-
-
-// Functionok - Structok
-// Kell egy Struct amibe valaki, hogyha jelentkezik, hogy meglopták, abba mik kellenek ==>
-// (név, address, hogy vesztette el a pénzét(description), kép vagy képek amit esetleg ipfs-re feltölt proof miatt
-// Lehet Egy Angel Struct is ami csak annyit listáz, hogy ki az aki már donatelt és ki nem ( Angeleknek van voting Powerjük )
-// Hogyan határozzuk meg a voting Powert?
-
-// Ez ahhoz a részhez fog kelleni amit tegnap este beszéltünk, hogy mindenki beregisztrál, hogy mit csinál mibe tudna segíteni
-// Erre is kelleni egy Struct amiben követnénk, hogy kiről milyen infó van
-// A fő cél ugye az lenne, hogy ezzel olyan globális hálót alakítunk ki amiben a lehető leggyorsabban tudunk segíteni aki bajban van
-// Ezt lehetne tovább fokozni majd később fizetési formákban ( csak opció de ez is egy út lehet ) hogy valahonnan legyen funding
-// hogyha már nagy lesz a DAO 
-
-// Ez itt egy olyan function lenne, hogy valaki felsubmitol valamit, hogy elakadt a kocsija, kéne neki orvosi kivizsgálás
-// de nincs rá pénze, bármi, ez bemenne egy közös helyre ahol a már segítő emberek megtudnák nézni, hogy tud e segíteni vagy sem
-// Ez lehetne itt akár lens-el is később  
-
-// function submitHelp(address _address, uint256 _country, string memory _description) public {
-    // Itt ezt bemenne valami adatbázisba amit mindenki lát, itt valami kontakt method majd kelleni fog
-// }
-
-//Csak Governor írhatja ki, itt lesz egy amount, description és aztán erre lehet majd szavazni
-
-
-// function addGovernor() public {
-
-// }
 }
