@@ -67,6 +67,7 @@ export default {
     helpMe () {
       console.log(this.form)
       console.log('HALP')
+      // MOralis.exextadsojfksad
     }
   }
 }
