@@ -15,6 +15,12 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
         uint256 expectedAmount;
     }
 
+    struct Volunteer{
+        uint256 volunteerId;
+        address volunteerAddress;
+        string introduction;
+    }
+
     struct VictimRequest {
         uint256 id;
         address payable myAddress;
@@ -37,10 +43,11 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
     }
 
     uint256 requestsNum = 0;
+    uint256 vId = 0; 
     VictimRequest[] requests;
+    Volunteer[] volunteers;
 
     uint256 angelsNum = 0;
-    string angelURI = "something.com"; // ide jön majd az ipfs uri link ami az angel NFT imagét mutatja
     address[] governors;
     address[] angels;
 
@@ -86,7 +93,7 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
         angels.push(msg.sender);
 
         _mint(msg.sender, angelsNum);
-        _setTokenURI(angelsNum++, angelURI);
+        _setTokenURI(angelsNum++, "angelNft.com");
     }
 
     function requestHelp(string memory _name, string memory _email, string memory _description, uint256 _expectedAmount) public {
@@ -105,6 +112,12 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
             yesVotes: 0,
             noVotes: 0
         }));
+    }
+
+    function joinAsVolunteer(string memory _introduction) public {
+        Volunteer memory newVolunteer = Volunteer(vId, msg.sender, _introduction);
+        volunteers.push(newVolunteer);
+        vId++;
     }
 
     function validateRequest(uint256 _requestId, bool _valid, uint256 _expectedAmount) public isGovernor{
@@ -155,5 +168,9 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
 
     function getAllRequests() public view returns(VictimRequest[] memory){
         return requests;
+    }
+
+    function printAllVolunteers() public view returns(Volunteer[] memory){
+        return volunteers;
     }
 }
