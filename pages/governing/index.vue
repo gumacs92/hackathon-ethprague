@@ -42,7 +42,7 @@
               Current vault
             </h2>
             <h1>
-              {{ vaultMoney }} ETH
+              {{ Math.round(vaultMoney, 2) }} ETH
             </h1>
           </div>
           <div class="text-center border-b py-3">
@@ -50,13 +50,13 @@
               Approved request
             </h2>
           </div>
-          <div v-if="endedRequests.length === 0">
+          <div v-if="approvedRequests.length === 0">
             <p class="text-center">
               No ended votes yet
             </p>
           </div>
           <div v-else>
-            <div v-for="(request, index) in endedRequests" :key="index">
+            <div v-for="(request, index) in approvedRequests" :key="index">
               <div class="flex flex-col items-center border-b pb-2 text-lg">
                 <div class="flex-1">
                   <p class="text-gray-600">
@@ -105,18 +105,18 @@
                 <div class="flex flex-row gap-3 justify-around h-full">
                   <p>
                     <span class="text-red-200 font-bold">Vote until</span><br>
-                    <span class="font-raleway font-bold">{{ request.voteUntil | formatDate }}</span>
+                    <span class="font-raleway font-bold">{{ request.votingEndsAt | formatDate }}</span>
                   </p>
                   <div class="flex flex-col justify-center items-end">
                     <img
                       src="/img/icons/thumbs-up.png"
                       :class="{ 'bg-green-600 rounded-full w-12 h-12': request.userApproved === true }"
-                      @click="voteFor(request)"
+                      @click="vote(request)"
                     >
                     <img
                       src="/img/icons/thumbs-down.png"
                       :class="{ 'bg-red-600 rounded-full w-12 h-12': request.userApproved === false}"
-                      @click="voteAgainst(request)"
+                      @click="vote(request, false)"
                     >
                   </div>
                 </div>
@@ -159,10 +159,13 @@
 // change amount window
 // validate list
 import { DateTime } from 'luxon'
+import Moralis from 'moralis'
 import BaseContainer from '~/components/BaseContainer'
 import BaseModal from '~/components/BaseModal'
 import OverlayLoader from '~/components/OverlayLoader'
 import Input from '~/components/inputs/Input'
+import RedCrossVault from '~/build/contracts/RedCrossVault.json'
+import { normalizeContractOutput } from '~/utils/methods'
 export default {
   name: 'ApplyForHelpPage',
   components: {
@@ -177,54 +180,34 @@ export default {
     }
   },
   data () {
+    // uint256 id;
+    // address payable myAddress;
+    // string name;
+    // string email;
+    // string description;
+    // uint256 expectedAmount;
+    // bool invalid;
+    // bool valid;
+    // bool isOnVote;
+    // bool approved;
     return {
       loading: false,
       vaultMoney: 3.2,
       modalRequest: null,
       changedExpectedAmount: null,
-      incomingRequests: [
-        {
-          description: 'I need help, please help me!',
-          expectedAmount: 1.2,
-          name: 'Test Eset'
-        },
-        {
-          description: 'My house has been destroyed during and earthquake, please help me!',
-          expectedAmount: 13,
-          name: 'Test Elek'
-        }
-      ],
-      currentRequests: [
-        {
-          description: 'I need help, please help me!',
-          expectedAmount: 1.2,
-          name: 'Test Eset',
-          userApproved: null,
-          voteUntil: 1654994038
-        },
-        {
-          description: 'My house has been destroyed during and earthquake, please help me!',
-          expectedAmount: 13,
-          name: 'Test Elek',
-          userApproved: null,
-          voteUntil: 1654994038
-        }
-      ],
-      endedRequests: [
-        {
-          description: 'I need help, please help me!',
-          expectedAmount: 1.2,
-          name: 'Test Eset'
-        },
-        {
-          description: 'My house has been destroyed during and earthquake, please help me!',
-          expectedAmount: 13,
-          name: 'Test Elek'
-        }
-      ]
+      requests: []
     }
   },
   computed: {
+    incomingRequests () {
+      return this.requests.filter(r => !r.valid && !r.invalid)
+    },
+    currentRequests () {
+      return this.requests.filter(r => r.valid && DateTime.now().toSeconds() < r.votingEndsAt)
+    },
+    approvedRequests () {
+      return this.requests.filter(r => !r.approved && r.valid && DateTime.now().toSeconds() > r.votingEndsAt && r.yesVotes > r.noVotes)
+    },
     user () {
       return this.$store.state.auth.user
     },
@@ -235,32 +218,103 @@ export default {
       return this.$store.state.auth.address
     }
   },
-  mounted () {
+  beforeMount () {
+    this.loadData()
   },
   methods: {
+    async loadData () {
+      this.loading = true
+
+      this.requests = normalizeContractOutput(await Moralis.executeFunction({
+        abi: RedCrossVault.abi,
+        contractAddress: RedCrossVault.networks[this.$config.networkId].address,
+        functionName: 'getAllRequests'
+      }))
+
+      const result = await Moralis.executeFunction({
+        abi: RedCrossVault.abi,
+        contractAddress: RedCrossVault.networks[this.$config.networkId].address,
+        functionName: 'getVaultBalance'
+      })
+      // console.log(result)
+      // console.log(result.toBigInt())
+      // console.log(Moralis.Units.FromWei(result.toBigInt()))
+      this.vaultMoney = Moralis.Units.FromWei(result.toBigInt())
+
+      this.loading = false
+    },
     showModalFor (request) {
       this.modalRequest = request
     },
-    validateRequest () {
+    async validateRequest () {
       if (this.changedExpectedAmount) {
         this.modalRequest.expectedAmount = this.changedExpectedAmount
       }
+      // TODO fix the problem where not whole number are causing error
+      this.loading = true
+      const transaction = await Moralis.executeFunction({
+        abi: RedCrossVault.abi,
+        contractAddress: RedCrossVault.networks[this.$config.networkId].address,
+        functionName: 'validateRequest',
+        params: {
+          _requestId: this.modalRequest.id,
+          _valid: true,
+          _expectedAmount: this.modalRequest.expectedAmount
+        }
+      })
+      await transaction.wait()
+      await this.loadData()
       this.modalRequest = null
+      this.loading = false
       this.$rxt.toast('Success', 'Succesfully validated the request!')
     },
-    deleteRequest () {
+    async deleteRequest () {
+      this.loading = true
+      const transaction = await Moralis.executeFunction({
+        abi: RedCrossVault.abi,
+        contractAddress: RedCrossVault.networks[this.$config.networkId].address,
+        functionName: 'validateRequest',
+        params: {
+          _requestId: this.modalRequest.id,
+          _valid: false,
+          _expectedAmount: this.modalRequest.expectedAmount
+        }
+      })
+      await transaction.wait()
+      await this.loadData()
       this.modalRequest = null
+      this.loading = false
       this.$rxt.toast('Success', 'Succesfully deleted the request!')
     },
-    voteFor (request) {
+    async vote (request, voteFor = true) {
+      this.loading = true
+      const transaction = await Moralis.executeFunction({
+        abi: RedCrossVault.abi,
+        contractAddress: RedCrossVault.networks[this.$config.networkId].address,
+        functionName: 'vote',
+        params: {
+          _requestId: request.id,
+          _voteNumber: voteFor ? 0 : 2
+        }
+      })
+      await transaction.wait()
+      await this.loadData()
+      this.loading = false
       this.$rxt.toast('Success', 'Succesfully voted for request!')
-      request.userApproved = true
     },
-    voteAgainst (request) {
-      this.$rxt.toast('Success', 'Succesfully voted against the request!')
-      request.userApproved = false
-    },
-    executeProposal (request) {
+    async executeProposal (request) {
+      this.loading = true
+      const transaction = await Moralis.executeFunction({
+        abi: RedCrossVault.abi,
+        contractAddress: RedCrossVault.networks[this.$config.networkId].address,
+        functionName: 'approveRequest',
+        params: {
+          _requestId: request.id
+        }
+      })
+      await transaction.wait()
+      await this.loadData()
+      this.loading = false
       this.$rxt.toast('Success', 'Succesfully executed the proposal!')
     }
   }

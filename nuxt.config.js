@@ -5,10 +5,6 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
-  server: {
-    port: 3001,
-  },
-
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'hackathon-ethprague',
@@ -63,8 +59,6 @@ export default {
   publicRuntimeConfig: {
     moralisAppId: process.env.MORALIS_APP_ID || '',
     moralisServerUrl: process.env.MORALIS_SERVER_URL || '',
-    councilVaultContract: process.env.COUNCIL_VAULT_CONTRACT || '',
-    redCrossVaultContract: process.env.RED_CROSS_VAULT_CONTRACT || '',
-    councilVotingContract: process.env.COUNCIL_VOTING_CONTRACT || ''
+    networkId: 5777
   }
 }

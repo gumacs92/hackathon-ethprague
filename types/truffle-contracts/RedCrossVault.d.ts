@@ -7,10 +7,7 @@ import { EventData, PastEventOptions } from "web3-eth-contract";
 
 export interface RedCrossVaultContract
   extends Truffle.Contract<RedCrossVaultInstance> {
-  "new"(
-    _elfiContract: string,
-    meta?: Truffle.TransactionDetails
-  ): Promise<RedCrossVaultInstance>;
+  "new"(meta?: Truffle.TransactionDetails): Promise<RedCrossVaultInstance>;
 }
 
 export interface Approval {
@@ -239,102 +236,163 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
   };
 
   donate: {
-    (
-      angelRequest: { name: string; description: string; givenAmount: string },
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<Truffle.TransactionResponse<AllEvents>>;
-    call(
-      angelRequest: { name: string; description: string; givenAmount: string },
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
-    sendTransaction(
-      angelRequest: { name: string; description: string; givenAmount: string },
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<string>;
-    estimateGas(
-      angelRequest: { name: string; description: string; givenAmount: string },
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<number>;
+    (txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse<AllEvents>
+    >;
+    call(txDetails?: Truffle.TransactionDetails): Promise<void>;
+    sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
+    estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
   };
 
   requestHelp: {
     (
-      input: {
-        name: string;
-        email: string;
-        description: string;
-        expectedAmount: string;
-      },
+      _name: string,
+      _email: string,
+      _description: string,
+      _expectedAmount: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<Truffle.TransactionResponse<AllEvents>>;
     call(
-      input: {
-        name: string;
-        email: string;
-        description: string;
-        expectedAmount: string;
-      },
+      _name: string,
+      _email: string,
+      _description: string,
+      _expectedAmount: number | BN | string,
       txDetails?: Truffle.TransactionDetails
-    ): Promise<BN>;
+    ): Promise<void>;
     sendTransaction(
-      input: {
-        name: string;
-        email: string;
-        description: string;
-        expectedAmount: string;
-      },
+      _name: string,
+      _email: string,
+      _description: string,
+      _expectedAmount: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<string>;
     estimateGas(
-      input: {
-        name: string;
-        email: string;
-        description: string;
-        expectedAmount: string;
-      },
+      _name: string,
+      _email: string,
+      _description: string,
+      _expectedAmount: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
 
   validateRequest: {
     (
-      requestId: number | BN | string,
+      _requestId: number | BN | string,
+      _valid: boolean,
+      _expectedAmount: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<Truffle.TransactionResponse<AllEvents>>;
     call(
-      requestId: number | BN | string,
+      _requestId: number | BN | string,
+      _valid: boolean,
+      _expectedAmount: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<void>;
     sendTransaction(
-      requestId: number | BN | string,
+      _requestId: number | BN | string,
+      _valid: boolean,
+      _expectedAmount: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<string>;
     estimateGas(
-      requestId: number | BN | string,
+      _requestId: number | BN | string,
+      _valid: boolean,
+      _expectedAmount: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  changeRequestedAmount: {
+    (
+      _requestId: number | BN | string,
+      _newAmount: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      _requestId: number | BN | string,
+      _newAmount: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      _requestId: number | BN | string,
+      _newAmount: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      _requestId: number | BN | string,
+      _newAmount: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
 
   approveRequest: {
     (
-      requestId: number | BN | string,
+      _requestId: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<Truffle.TransactionResponse<AllEvents>>;
     call(
-      requestId: number | BN | string,
+      _requestId: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<void>;
     sendTransaction(
-      requestId: number | BN | string,
+      _requestId: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<string>;
     estimateGas(
-      requestId: number | BN | string,
+      _requestId: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
 
   getVaultBalance(txDetails?: Truffle.TransactionDetails): Promise<BN>;
+
+  vote: {
+    (
+      _requestId: number | BN | string,
+      _voteNumber: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      _requestId: number | BN | string,
+      _voteNumber: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      _requestId: number | BN | string,
+      _voteNumber: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      _requestId: number | BN | string,
+      _voteNumber: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  checkRequest(
+    _requestId: number | BN | string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<boolean>;
+
+  getAllRequests(
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<
+    {
+      id: BN;
+      myAddress: string;
+      name: string;
+      email: string;
+      description: string;
+      expectedAmount: BN;
+      invalid: boolean;
+      valid: boolean;
+      isOnVote: boolean;
+      approved: boolean;
+      votingEndsAt: BN;
+      yesVotes: BN;
+      noVotes: BN;
+    }[]
+  >;
 
   methods: {
     /**
@@ -517,118 +575,163 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
     };
 
     donate: {
-      (
-        angelRequest: {
-          name: string;
-          description: string;
-          givenAmount: string;
-        },
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<Truffle.TransactionResponse<AllEvents>>;
-      call(
-        angelRequest: {
-          name: string;
-          description: string;
-          givenAmount: string;
-        },
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<void>;
-      sendTransaction(
-        angelRequest: {
-          name: string;
-          description: string;
-          givenAmount: string;
-        },
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<string>;
-      estimateGas(
-        angelRequest: {
-          name: string;
-          description: string;
-          givenAmount: string;
-        },
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<number>;
+      (txDetails?: Truffle.TransactionDetails): Promise<
+        Truffle.TransactionResponse<AllEvents>
+      >;
+      call(txDetails?: Truffle.TransactionDetails): Promise<void>;
+      sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
+      estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
     };
 
     requestHelp: {
       (
-        input: {
-          name: string;
-          email: string;
-          description: string;
-          expectedAmount: string;
-        },
+        _name: string,
+        _email: string,
+        _description: string,
+        _expectedAmount: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<Truffle.TransactionResponse<AllEvents>>;
       call(
-        input: {
-          name: string;
-          email: string;
-          description: string;
-          expectedAmount: string;
-        },
+        _name: string,
+        _email: string,
+        _description: string,
+        _expectedAmount: number | BN | string,
         txDetails?: Truffle.TransactionDetails
-      ): Promise<BN>;
+      ): Promise<void>;
       sendTransaction(
-        input: {
-          name: string;
-          email: string;
-          description: string;
-          expectedAmount: string;
-        },
+        _name: string,
+        _email: string,
+        _description: string,
+        _expectedAmount: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<string>;
       estimateGas(
-        input: {
-          name: string;
-          email: string;
-          description: string;
-          expectedAmount: string;
-        },
+        _name: string,
+        _email: string,
+        _description: string,
+        _expectedAmount: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<number>;
     };
 
     validateRequest: {
       (
-        requestId: number | BN | string,
+        _requestId: number | BN | string,
+        _valid: boolean,
+        _expectedAmount: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<Truffle.TransactionResponse<AllEvents>>;
       call(
-        requestId: number | BN | string,
+        _requestId: number | BN | string,
+        _valid: boolean,
+        _expectedAmount: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<void>;
       sendTransaction(
-        requestId: number | BN | string,
+        _requestId: number | BN | string,
+        _valid: boolean,
+        _expectedAmount: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<string>;
       estimateGas(
-        requestId: number | BN | string,
+        _requestId: number | BN | string,
+        _valid: boolean,
+        _expectedAmount: number | BN | string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
+    changeRequestedAmount: {
+      (
+        _requestId: number | BN | string,
+        _newAmount: number | BN | string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        _requestId: number | BN | string,
+        _newAmount: number | BN | string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        _requestId: number | BN | string,
+        _newAmount: number | BN | string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        _requestId: number | BN | string,
+        _newAmount: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<number>;
     };
 
     approveRequest: {
       (
-        requestId: number | BN | string,
+        _requestId: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<Truffle.TransactionResponse<AllEvents>>;
       call(
-        requestId: number | BN | string,
+        _requestId: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<void>;
       sendTransaction(
-        requestId: number | BN | string,
+        _requestId: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<string>;
       estimateGas(
-        requestId: number | BN | string,
+        _requestId: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<number>;
     };
 
     getVaultBalance(txDetails?: Truffle.TransactionDetails): Promise<BN>;
+
+    vote: {
+      (
+        _requestId: number | BN | string,
+        _voteNumber: number | BN | string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        _requestId: number | BN | string,
+        _voteNumber: number | BN | string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        _requestId: number | BN | string,
+        _voteNumber: number | BN | string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        _requestId: number | BN | string,
+        _voteNumber: number | BN | string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
+    checkRequest(
+      _requestId: number | BN | string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<boolean>;
+
+    getAllRequests(
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<
+      {
+        id: BN;
+        myAddress: string;
+        name: string;
+        email: string;
+        description: string;
+        expectedAmount: BN;
+        invalid: boolean;
+        valid: boolean;
+        isOnVote: boolean;
+        approved: boolean;
+        votingEndsAt: BN;
+        yesVotes: BN;
+        noVotes: BN;
+      }[]
+    >;
 
     /**
      * See {IERC721-safeTransferFrom}.

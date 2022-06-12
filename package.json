@@ -13,7 +13,7 @@
     "test": "jest",
     "generate-types": "npx typechain --target=truffle-v5 'build/contracts/*.json'",
     "remix": "remixd -u https://remix.ethereum.org/",
-    "deploy": "truffle migrate --network development_council --reset && npm run generate-types"
+    "deploy": "truffle migrate --network development --reset && npm run generate-types"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.6.0",

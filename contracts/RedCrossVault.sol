@@ -22,14 +22,11 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
         string email;
         string description;
         uint256 expectedAmount;
+        bool invalid;
         bool valid;
         bool isOnVote;
         bool approved;
-    }
-
-    struct VotingIds {
-        uint256 voteId;
-        uint256 startTime;
+        uint256 votingEndsAt;
         uint256 yesVotes;
         uint256 noVotes;
     }
@@ -41,14 +38,13 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
 
     uint256 requestsNum = 0;
     VictimRequest[] requests;
-    VotingIds[] newVote;
 
     uint256 angelsNum = 0;
     string angelURI = "something.com"; // ide jön majd az ipfs uri link ami az angel NFT imagét mutatja
     address[] governors;
     address[] angels;
 
-    mapping(address => bool) alreadyVoted;
+    mapping(address => mapping(uint256 => bool)) alreadyVoted;
 
 
     constructor() ERC721("Angel", "AT"){ 
@@ -56,7 +52,7 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
     }
 
     modifier votingIsActive(uint256 _voteId){
-        require(newVote[_voteId].startTime > block.timestamp, "Vote period for this request has been ended");
+        require(requests[_voteId].valid == true && requests[_voteId].votingEndsAt >= block.timestamp, "This voting is not active");
         // if(newVote[_voteId].startTime < block.timestamp){
         //     requests[_voteId].isOnVote = false;
         // }
@@ -101,21 +97,27 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
             email: _email,
             description: _description,
             expectedAmount: _expectedAmount,
+            invalid: false,
             valid: false,
             isOnVote: false,
-            approved: false
+            approved: false,
+            votingEndsAt: 0,
+            yesVotes: 0,
+            noVotes: 0
         }));
     }
 
-    function validateRequest(uint256 _requestId) public isGovernor{
+    function validateRequest(uint256 _requestId, bool _valid, uint256 _expectedAmount) public isGovernor{
         require(requests[_requestId].valid == false, "Governor already validated this request");
 
-        uint256 votingEnds = block.timestamp + votingTime;
-        VotingIds memory addVote = VotingIds(_requestId, votingEnds,0,0);
-        newVote.push(addVote);
 
-        requests[_requestId].valid = true;
-        requests[_requestId].isOnVote = true;
+        if(_valid == true) {
+            requests[_requestId].votingEndsAt = block.timestamp + votingTime;
+            requests[_requestId].valid = true;
+            requests[_requestId].isOnVote = true;
+            requests[_requestId].expectedAmount = _expectedAmount;
+        } else 
+            requests[_requestId].invalid = true;
     }
 
     // function checkRequestId(uint256 _requestId) public view returns (bool){
@@ -126,10 +128,10 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
         requests[_requestId].expectedAmount = _newAmount;
     }
 
-    function approveRequest(uint256 requestId) public isGovernor{
-        requests[requestId].approved = true;
-        address payable victimAddress = requests[requestId].myAddress;
-        victimAddress.transfer(requests[requestId].expectedAmount);
+    function approveRequest(uint256 _requestId) public isGovernor{
+        requests[_requestId].approved = true;
+        address payable victimAddress = requests[_requestId].myAddress;
+        victimAddress.transfer(requests[_requestId].expectedAmount * (10 ** 18));
     }
 
     function getVaultBalance() public view returns (uint256){
@@ -137,17 +139,21 @@ contract RedCrossVault is ERC721URIStorage, Ownable {
     }
 
     function vote(uint256 _requestId, Votes _voteNumber) public isVoter votingIsActive(_requestId) {
-        require(alreadyVoted[msg.sender] == false, "You already made your vote for this request");
+        require(alreadyVoted[msg.sender][_requestId] == false, "You already made your vote for this request");
 
         if(_voteNumber == Votes.YES){
-            newVote[_requestId].yesVotes++;
+            requests[_requestId].yesVotes++;
         }
         else{
-            newVote[_requestId].noVotes++;
+            requests[_requestId].noVotes++;
         }
     }
 
     function checkRequest(uint256 _requestId) public view returns(bool){
         return requests[_requestId].isOnVote;
+    }
+
+    function getAllRequests() public view returns(VictimRequest[] memory){
+        return requests;
     }
 }
