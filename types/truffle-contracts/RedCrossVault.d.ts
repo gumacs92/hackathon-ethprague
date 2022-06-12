@@ -392,11 +392,6 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
     ): Promise<number>;
   };
 
-  checkRequest(
-    _requestId: number | BN | string,
-    txDetails?: Truffle.TransactionDetails
-  ): Promise<boolean>;
-
   getRequests(
     txDetails?: Truffle.TransactionDetails
   ): Promise<
@@ -409,7 +404,6 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
       expectedAmount: BN;
       invalid: boolean;
       valid: boolean;
-      isOnVote: boolean;
       approved: boolean;
       votingEndsAt: BN;
       yesVotes: BN;
@@ -423,8 +417,8 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
     {
       volunteerId: BN;
       volunteerAddress: string;
-      introduction: string;
       name: string;
+      introduction: string;
     }[]
   >;
 
@@ -765,11 +759,6 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
       ): Promise<number>;
     };
 
-    checkRequest(
-      _requestId: number | BN | string,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<boolean>;
-
     getRequests(
       txDetails?: Truffle.TransactionDetails
     ): Promise<
@@ -782,7 +771,6 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
         expectedAmount: BN;
         invalid: boolean;
         valid: boolean;
-        isOnVote: boolean;
         approved: boolean;
         votingEndsAt: BN;
         yesVotes: BN;
@@ -796,8 +784,8 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
       {
         volunteerId: BN;
         volunteerAddress: string;
-        introduction: string;
         name: string;
+        introduction: string;
       }[]
     >;
 

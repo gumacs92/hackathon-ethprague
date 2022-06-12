@@ -1,70 +1,56 @@
-# hackathon-ethprague
+# Red-Cross-Crypto / Decentralized Charity
+Developed at [ETHPrague 2022]  
 
-## Build Setup
+## About
+The Project does a few things already, but phase2 still needs to be developed. The most basic implementation is that anyone can submit a request who is in trouble ( for example if somebody's house has been destroyed by an earthquake or simply has been hacked, then he or she can request a little money for assistance. Of course in this case they will need to add some proof, DAO would not just give out money for everyone who requests it ). After the request the governor can validate the request and decide whether it is worthy to put on a voting period. If the governor deems it appropriate, then the voting period begins. If the voting period ends with more yesVotes than noVotes then the governor can send the requested amount to the target in need (Governor can aldo change the amount if he thinks it's too high)
 
-```bash
-# install dependencies
-$ npm install
+Right now only those people can vote who have made some donation in the DAO. Of course later on we plan to change this, so a dedicated team of charitable people can steer the decision of this DAO.
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+## Contracts
 
-# build for production and launch server
-$ npm run build
-$ npm run start
+[📚 RedCrossVault]
 
-# generate static project
-$ npm run generate
+### Built with:
+
+-Nuxt.js
+-TailwindCSS
+-Moralis
+-Solidity
+
+
+### Dev Environemnt
+
+We have been working with Ganache local blockchain, so we suggest using that too. If installed, then start a Ganache blockchain on http://127.0.0.1:7545)
+
+1. Make `.env`
+
+```shell
+touch .env
 ```
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+add environment variable
 
-## Special Directories
+```text
+MORALIS_APP_ID=<your-moralis-app-id-here>
+MORALIS_SERVER_URL=<your-moralis-server-url-here>
+```
 
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
+3. Install dependencies
 
-### `assets`
+```bash
+npm install
+```
 
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
+4. Deploy contract on the running local blockchain
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
+```bash
+npm run deploy
+```
 
-### `components`
+4. Start developmment
 
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
+```bash
+npm run dev
+```
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
-
-### `layouts`
-
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
-
-
-### `pages`
-
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
-
-### `plugins`
-
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
-
-### `static`
-
-This directory contains your static files. Each file inside this directory is mapped to `/`.
-
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
-
-### `store`
-
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
-# hackathon-ethprague
+5. 📱 Open http://localhost:3000 to see the app
