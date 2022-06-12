@@ -11,7 +11,8 @@ x<template>
           Red Cross Crypto
         </h1>
         <p class="font-bold text-xl mt-6">
-          The only crypto project that truly here to help. Either you are a crypto fraud victim, or an earthquake victim, or anything else, we can help you.
+          The only crypto project that's here to truly help.
+          A community driven crypto aid program for the people in need - both online and offline.
         </p>
       </div>
       <div class="col-span-2">
@@ -33,7 +34,7 @@ x<template>
               Every little matters!
             </h2>
             <p class="font-bold text-xl mt-6 text-white">
-              You can help us by donating to the project, or by volunteering to help us. Either way you are here ot help us.
+              You can help us by donating to the project, or by volunteering to help us. Either way what matters is that you are here to give help!
             </p>
             <button class="btn mt-5 text-center self-center w-52" @click.prevent="$router.push('/be-an-angel')">
               I want to help!
