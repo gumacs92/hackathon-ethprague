@@ -19,11 +19,26 @@
         <div v-if="user" class="flex flex-col gap-5 mt-10 w-1/2">
           <!-- <Input v-model="form.name" placeholder="Name" class="w-full" />
         <Input v-model="form.email" placeholder="Email" class="w-full" /> -->
-          <Input v-model="form.amount" type="number" placeholder="How much ETH would you like to give?" class="w-full" />
+          <div class="flex flex-col gap-5 ">
+            <Input v-model="form.amount" type="number" placeholder="How much ETH would you like to give?" class="w-full" />
 
-          <button class="btn text-center self-center w-52" @click="iWishToHelp()">
-            I wish to help
-          </button>
+            <button class="btn text-center self-center w-52" @click="iWishToHelp()">
+              I wish to help
+            </button>
+          </div>
+          <h1 class="text-center">
+            OR
+          </h1>
+          <h2 class="text-center">
+            Volunteer to be an active doer
+          </h2>
+          <div class="flex flex-col gap-5 ">
+            <Input v-model="form.name" placeholder="State your name" class="w-full" />
+            <Textarea v-model="form.introduction" :rows="3" placeholder="Please introduce yourself, and describe your contact, so people can find you for help" class="w-full" />
+            <button class="btn text-center self-center w-52" @click="iWantToVolunteer()">
+              I volunteer
+            </button>
+          </div>
         </div>
         <div v-else class="flex flex-col gap-5 w-full mt-5">
           <button class="btn text-center self-center w-60" @click="connectWithMoralis()">
@@ -40,18 +55,21 @@ import Moralis from 'moralis'
 import OverlayLoader from '~/components/OverlayLoader'
 import RedCrossVault from '~/build/contracts/RedCrossVault.json'
 import Input from '~/components/inputs/Input'
+import Textarea from '~/components/inputs/Textarea'
 export default {
   name: 'ApplyForHelpPage',
   components: {
     // BaseContainer
     Input,
+    Textarea,
     OverlayLoader
   },
   data () {
     return {
       loading: false,
       form: {
-        // name: '',
+        name: '',
+        introduction: '',
         // email: '',
         // address: '',
         amount: null
@@ -73,6 +91,23 @@ export default {
     this.form.address = this.user ? this.address : ''
   },
   methods: {
+    async iWantToVolunteer () {
+      this.loading = true
+      const transaction = await Moralis.executeFunction({
+        contractAddress: RedCrossVault.networks[this.$config.networkId].address,
+        abi: RedCrossVault.abi,
+        functionName: 'joinAsVolunteer',
+        params: {
+          _name: this.form.name,
+          _introduction: this.form.introduction
+        }
+      })
+
+      await transaction.wait()
+
+      this.loading = false
+      this.$rxt.toast('Success', 'Thank you for joining to our volunteers!')
+    },
     async iWishToHelp () {
       this.loading = true
       const transaction = await Moralis.executeFunction({
@@ -86,9 +121,6 @@ export default {
 
       this.loading = false
       this.$rxt.toast('Success', 'Thank you for your kind and generous donation!')
-
-      console.log(this.form)
-      console.log('HALP IS ON THE WAY')
     },
     async connectWithMoralis () {
       if (!this.user) {

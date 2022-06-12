@@ -10,7 +10,7 @@
           </div>
           <div v-if="incomingRequests.length === 0">
             <p class="text-center">
-              No ended votes yet
+              No requests yet
             </p>
           </div>
           <div v-else>
@@ -87,7 +87,7 @@
           </h2>
         </div>
 
-        <div class="max-w-5xl mx-auto flex flex-col gap-5 w-full mt-5 overflow-auto">
+        <div v-if="currentRequests.length" class="max-w-5xl mx-auto flex flex-col gap-5 w-full mt-5 overflow-auto">
           <BaseContainer v-for="(request, index) in currentRequests" :key="index">
             <div class="grid grid-cols-4 grid-rows-1">
               <div class="col-span-3">
@@ -123,6 +123,11 @@
               </div>
             </div>
           </BaseContainer>
+        </div>
+        <div v-else class="max-w-5xl mx-auto w-full mt-5">
+          <h2 class="text-center">
+            No running proposals yet
+          </h2>
         </div>
       </div>
       <BaseModal v-if="modalRequest">
@@ -228,7 +233,7 @@ export default {
       this.requests = normalizeContractOutput(await Moralis.executeFunction({
         abi: RedCrossVault.abi,
         contractAddress: RedCrossVault.networks[this.$config.networkId].address,
-        functionName: 'getAllRequests'
+        functionName: 'getRequests'
       }))
 
       const result = await Moralis.executeFunction({
@@ -294,7 +299,7 @@ export default {
         functionName: 'vote',
         params: {
           _requestId: request.id,
-          _voteNumber: voteFor ? 0 : 2
+          _voteNumber: voteFor ? 0 : 1
         }
       })
       await transaction.wait()

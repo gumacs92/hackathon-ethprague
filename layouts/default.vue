@@ -23,6 +23,9 @@
               <nuxt-link class="btn-link" to="/governing">
                 Help us govern
               </nuxt-link>
+              <nuxt-link class="btn-link" to="/our-volunteers">
+                Volunteers
+              </nuxt-link>
             </div>
           </div>
         </div>

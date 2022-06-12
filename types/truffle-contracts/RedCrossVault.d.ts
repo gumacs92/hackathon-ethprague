@@ -275,6 +275,29 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
     ): Promise<number>;
   };
 
+  joinAsVolunteer: {
+    (
+      _name: string,
+      _introduction: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      _name: string,
+      _introduction: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      _name: string,
+      _introduction: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      _name: string,
+      _introduction: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
   validateRequest: {
     (
       _requestId: number | BN | string,
@@ -374,7 +397,7 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
     txDetails?: Truffle.TransactionDetails
   ): Promise<boolean>;
 
-  getAllRequests(
+  getRequests(
     txDetails?: Truffle.TransactionDetails
   ): Promise<
     {
@@ -391,6 +414,17 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
       votingEndsAt: BN;
       yesVotes: BN;
       noVotes: BN;
+    }[]
+  >;
+
+  getVolunteers(
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<
+    {
+      volunteerId: BN;
+      volunteerAddress: string;
+      introduction: string;
+      name: string;
     }[]
   >;
 
@@ -614,6 +648,29 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
       ): Promise<number>;
     };
 
+    joinAsVolunteer: {
+      (
+        _name: string,
+        _introduction: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        _name: string,
+        _introduction: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        _name: string,
+        _introduction: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        _name: string,
+        _introduction: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
     validateRequest: {
       (
         _requestId: number | BN | string,
@@ -713,7 +770,7 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
       txDetails?: Truffle.TransactionDetails
     ): Promise<boolean>;
 
-    getAllRequests(
+    getRequests(
       txDetails?: Truffle.TransactionDetails
     ): Promise<
       {
@@ -730,6 +787,17 @@ export interface RedCrossVaultInstance extends Truffle.ContractInstance {
         votingEndsAt: BN;
         yesVotes: BN;
         noVotes: BN;
+      }[]
+    >;
+
+    getVolunteers(
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<
+      {
+        volunteerId: BN;
+        volunteerAddress: string;
+        introduction: string;
+        name: string;
       }[]
     >;
 
