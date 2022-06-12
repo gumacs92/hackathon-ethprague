@@ -9,7 +9,7 @@
     <div class="max-w-5xl mx-auto flex flex-col items-center mt-12 w-full">
       <div class="text-center">
         <h1 class="h1">
-          Be an angel for us
+          Be an angel
         </h1>
         <h2>
           Thank you for your generosity
