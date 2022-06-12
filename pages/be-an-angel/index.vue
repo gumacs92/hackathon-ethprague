@@ -15,10 +15,10 @@
           Thank you for your generosity
         </h2>
       </div>
-      <div v-if="user" class="flex flex-col gap-5 w-full mt-5">
-        <Input v-model="form.name" placeholder="Name" class="w-full" />
-        <Input v-model="form.email" placeholder="Email" class="w-full" />
-        <Input v-model="form.amount" placeholder="How much ETH would you like to give?" class="w-full" />
+      <div v-if="user" class="flex flex-col gap-5 mt-10 w-1/2">
+        <!-- <Input v-model="form.name" placeholder="Name" class="w-full" />
+        <Input v-model="form.email" placeholder="Email" class="w-full" /> -->
+        <Input v-model="form.amount" type="number" placeholder="How much ETH would you like to give?" class="w-full" />
 
         <button class="btn text-center self-center w-52" @click="iWishToHelp()">
           I wish to help
@@ -45,10 +45,10 @@ export default {
   data () {
     return {
       form: {
-        name: '',
-        email: '',
-        address: '',
-        description: ''
+        // name: '',
+        // email: '',
+        // address: '',
+        amount: null
       }
     }
   },

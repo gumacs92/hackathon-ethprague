@@ -37,9 +37,9 @@ export default {
   },
   methods: {
     calculateIconPosition () {
-      if (icon.value && overlay.value) {
-        const overlayHeight = overlay.value.getBoundingClientRect().height
-        const overlayAbsoluteTop = caluclateElAbsoluteOffsetTop(overlay.value)
+      if (this.icon.value && this.overlay.value) {
+        const overlayHeight = this.overlay.value.getBoundingClientRect().height
+        const overlayAbsoluteTop = this.caluclateElAbsoluteOffsetTop(this.overlay.value)
         // const scrollbarHeight = window.innerHeight * (window.innerHeight / document.body.offsetHeight)
         // console.log('rectangle bottom:' + ((articlesBottom + 75) - 150))
         // console.log('scroll y:' + (scrollbarHeight + window.scrollY))
@@ -50,13 +50,13 @@ export default {
         // console.log('overlay height: ' + overlay.offsetHeight)
         // positionTop =
 
-        topPosition.value = ((window.innerHeight / 2) * ((window.scrollY > overlayAbsoluteTop ? overlayAbsoluteTop : window.scrollY) / overlayAbsoluteTop))
-        if (window.scrollY > (overlayAbsoluteTop + 50)) { topPosition.value += window.scrollY - (overlayAbsoluteTop + 50) }
+        this.topPosition.value = ((window.innerHeight / 2) * ((window.scrollY > overlayAbsoluteTop ? overlayAbsoluteTop : window.scrollY) / overlayAbsoluteTop))
+        if (window.scrollY > (overlayAbsoluteTop + 50)) { this.topPosition.value += window.scrollY - (overlayAbsoluteTop + 50) }
 
-        if (topPosition.value < 50) {
-          topPosition.value = 50
+        if (this.topPosition.value < 50) {
+          this.topPosition.value = 50
         }
-        if (topPosition.value > (overlayHeight - 125)) { topPosition.value = overlayHeight - 125 }
+        if (this.topPosition.value > (overlayHeight - 125)) { this.topPosition.value = overlayHeight - 125 }
         // if ((listBottom + 75) - 1000 < (scrollbarHeight + window.scrollY) && !this.$fetchState.pending) {
       }
     },

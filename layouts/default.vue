@@ -1,9 +1,9 @@
 <template>
   <section class="">
-    <div class="fixed bg-fixed bg-white h-screen w-screen top-0" />
+    <div class="fixed bg-fixed bg-red-50 h-screen w-screen top-0" />
     <div class="relative">
       <div class="fixed top-0 w-full z-50">
-        <div class="bg-white border-b shadow-b-md h-20 relative">
+        <div class="bg-white border-b shadow-md h-20 relative">
           <div class="grid grid-rows-1 grid-cols-4 h-full ">
             <div class="col-span-2 flex flex-row items-center w-full h-full">
               <nuxt-link to="/">
@@ -20,7 +20,9 @@
               <nuxt-link class="btn-link" to="/be-an-angel">
                 Be an angel
               </nuxt-link>
-              <a class="btn-link" target="_blank" href="http://localhost:3000">Help us govern</a>
+              <nuxt-link class="btn-link" to="/governing">
+                Help us govern
+              </nuxt-link>
             </div>
           </div>
         </div>

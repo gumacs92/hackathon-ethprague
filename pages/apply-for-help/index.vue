@@ -15,10 +15,10 @@
           Please fill in the form below to apply for help
         </h2>
       </div>
-      <div class="flex flex-col gap-5 w-full mt-5">
+      <div class="flex flex-col gap-5 mt-10 w-1/2">
         <Input v-model="form.name" placeholder="Name" class="w-full" />
         <Input v-model="form.email" placeholder="Email" class="w-full" />
-        <Textarea v-model="form.description" placeholder="Please describe your situatun and how you got there, it will help the governors to decide about the help" class="w-full" />
+        <Textarea v-model="form.description" placeholder="Please describe your situation and how you got there, it will help the governors to decide about the help" class="w-full" />
         <Input v-model="form.expectedAmount" type="number" placeholder="Place your expected ETH amount here" class="w-full" />
 
         <button class="btn text-center self-center w-52" @click="helpMe()">
@@ -34,7 +34,6 @@ import Moralis from 'moralis'
 import Input from '~/components/inputs/Input'
 import Textarea from '~/components/inputs/Textarea'
 import RedCrossVault from '~/build/contracts/RedCrossVault.json'
-import CoreVoting from '~/abis/coreVoting.json'
 
 export default {
   name: 'ApplyForHelpPage',
@@ -81,40 +80,6 @@ export default {
       }
       const help = await Moralis.executeFunction(options)
       console.log(help)
-
-      // await Moralis.executeFunction({
-      //   contractAddress: this.$config.councilVotingContract,
-      //   functionName: 'changeVaultStatus',
-      //   abi: CoreVoting,
-      //   params: { vault: this.$config.councilVotingContract, isValid: true }
-      // })
-
-      const web3 = await Moralis.web3Library
-      const rInterface = new web3.utils.Interface(RedCrossVault.abi)
-      console.log('rInterface:', rInterface)
-      const callDataRedCrossApproved = rInterface.encodeFunctionData('approveRequest', [0]) // 0 helyére majd requestId kell
-      console.log('callDataResCrossApproved:', callDataRedCrossApproved)
-      // const toBeHashed = web3.utils.defaultAbiCoder.encode(['uint256'], [callDataRedCrossApproved])
-      // console.log('tobeHashed:', toBeHashed)
-      const calldata = web3.utils.keccak256(callDataRedCrossApproved)
-      console.log('calldata', calldata)
-      // web3.utils.keccak256("")
-
-      const options2 = {
-        contractAddress: this.$config.councilVotingContract,
-        functionName: 'proposal',
-        abi: CoreVoting,
-        params: {
-          votingVaults: [this.$config.councilVotingContract],
-          extraVaultData: [''],
-          targets: [this.$config.redCrossVaultContract],
-          calldatas: [calldata],
-          lastCall: 10,
-          ballot: 2
-        }
-      }
-      const proposing = await Moralis.executeFunction(options2)
-      console.log(proposing)
     }
   }
 }

@@ -19,6 +19,7 @@
     "@openzeppelin/contracts": "^4.6.0",
     "@remix-project/remixd": "^0.6.2",
     "core-js": "^3.19.3",
+    "luxon": "^2.4.0",
     "moralis": "^1.8.0",
     "nuxt": "^2.15.8",
     "vue": "^2.6.14",
